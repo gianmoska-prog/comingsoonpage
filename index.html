@@ -7,116 +7,243 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
-:root{
---black:#0E0D0B;
---black-2:#14120F;
-
-/* ultra subtle ivory gradient */
---ivory-1:#F0E7D6;
---ivory-2:#E7DCC7;
---ivory-3:#D9CBB1;
-
---ivory-mid:rgba(236,227,209,0.6);
---ivory-light:rgba(236,227,209,0.42);
-
---gold:rgba(176,146,104,0.18);
+:root {
+  --black:    #080705;
+  --choc-1:   #1a0f08;
+  --choc-2:   #2a1508;
+  --choc-3:   #3b1e0a;
+  --ivory-1:  #F0E7D6;
+  --ivory-2:  #E2D4BB;
+  --ivory-3:  #C8B898;
+  --ivory-mid: rgba(232,220,198,0.52);
+  --ivory-faint: rgba(232,220,198,0.32);
 }
 
-*{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%}
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box }
+html, body { height:100%; overflow:hidden }
 
-body{
-background:
-radial-gradient(1100px 520px at 50% 60%, var(--gold), transparent 60%),
-linear-gradient(180deg, var(--black-2), var(--black));
-font-family:"Cinzel", serif;
-overflow:hidden;
+body {
+  background: var(--black);
+  font-family: "Cinzel", serif;
+  position: relative;
 }
 
-.wrap{
-display:flex;
-align-items:center;
-justify-content:center;
-height:100%;
-text-align:center;
-position:relative;
+/* ─── CANVAS BACKGROUND ─── */
+canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
 }
 
-.center{
-transform:translateY(-4vh);
+/* ─── GRAIN OVERLAY ─── */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+  opacity: 0.028;
+  pointer-events: none;
+  z-index: 1;
 }
 
-/* GRADIENT WORDMARK */
-.wordmark{
-font-size:clamp(34px,5vw,84px);
-letter-spacing:.42em;
-
-/* gradient applied */
-background:linear-gradient(
-90deg,
-var(--ivory-3) 0%,
-var(--ivory-2) 35%,
-var(--ivory-1) 50%,
-var(--ivory-2) 65%,
-var(--ivory-3) 100%
-);
-
--webkit-background-clip:text;
--webkit-text-fill-color:transparent;
-
-opacity:0;
-animation:fadeSlow 3.2s ease forwards;
+/* ─── LAYOUT ─── */
+.wrap {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
 }
 
-/* unchanged hierarchy */
-.sub{
-margin-top:18px;
-font-size:clamp(10px,1vw,14px);
-letter-spacing:.55em;
-color:var(--ivory-mid);
-opacity:0;
-animation:fadeSlow 2.6s ease forwards;
-animation-delay:1.8s;
+.center { transform: translateY(-4vh); }
+
+/* ─── WORDMARK ─── */
+.wordmark {
+  font-size: clamp(32px, 5vw, 82px);
+  letter-spacing: .42em;
+  font-weight: 400;
+  position: relative;
+  display: inline-block;
+
+  /* base colour — visible even before animation */
+  color: var(--ivory-2);
+
+  opacity: 0;
+  animation: fadeUp 3.2s cubic-bezier(.16,1,.3,1) forwards;
 }
 
-.coming{
-position:absolute;
-bottom:10vh;
-left:0;
-right:0;
-margin:auto;
-text-align:center;
-font-size:clamp(12px,1.2vw,16px);
-letter-spacing:.5em;
-color:var(--ivory-light);
-opacity:0;
-animation:fadeSlow 2.4s ease forwards;
-animation-delay:3.2s;
+/* shimmer pseudo-element — slides across the text */
+.wordmark::after {
+  content: "MOSCATELLI";
+  position: absolute;
+  inset: 0;
+  letter-spacing: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  font-family: inherit;
+
+  background: linear-gradient(
+    100deg,
+    transparent          0%,
+    transparent         20%,
+    rgba(240,231,214,0.0)  24%,
+    rgba(240,231,214,0.12) 34%,
+    rgba(248,240,224,0.28) 42%,
+    rgba(255,248,235,0.38) 50%,
+    rgba(248,240,224,0.28) 58%,
+    rgba(240,231,214,0.12) 66%,
+    rgba(240,231,214,0.0)  76%,
+    transparent         80%,
+    transparent        100%
+  );
+  background-size: 280% 100%;
+  background-position: 260% center;
+
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  animation: shimmer 20s ease-in-out infinite;
+  animation-delay: 5s;
 }
 
-@keyframes fadeSlow{
-0%{opacity:0; transform:translateY(12px)}
-100%{opacity:1; transform:translateY(0)}
+@keyframes shimmer {
+  0%   { background-position: 260% center; }
+  50%  { background-position: -30% center; }
+  100% { background-position: -30% center; }
 }
 
-@media(max-width:600px){
-.wordmark{letter-spacing:.28em}
-.sub{letter-spacing:.35em}
-.coming{letter-spacing:.35em}
+/* ─── SUB-LINE ─── */
+.sub {
+  margin-top: 20px;
+  font-size: clamp(9px, 0.95vw, 13px);
+  letter-spacing: .58em;
+  color: var(--ivory-mid);
+  opacity: 0;
+  animation: fadeUp 2.4s ease forwards;
+  animation-delay: 2s;
+}
+
+/* ─── COMING SOON ─── */
+.coming {
+  position: absolute;
+  bottom: 10vh;
+  left: 0; right: 0;
+  margin: auto;
+  font-size: clamp(10px, 1.1vw, 14px);
+  letter-spacing: .52em;
+  color: var(--ivory-faint);
+  opacity: 0;
+  animation: fadeUp 2.2s ease forwards;
+  animation-delay: 3.6s;
+}
+
+/* ─── SHARED FADE ─── */
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(14px) }
+  to   { opacity:1; transform:translateY(0) }
+}
+
+/* ─── MOBILE ─── */
+@media (max-width: 600px) {
+  .wordmark { letter-spacing: .26em }
+  .wordmark::after { letter-spacing: .26em }
+  .sub     { letter-spacing: .36em }
+  .coming  { letter-spacing: .34em }
 }
 </style>
 </head>
 
 <body>
+
+<canvas id="bg"></canvas>
+
 <div class="wrap">
-
-<div class="center">
-<div class="wordmark">MOSCATELLI</div>
-<div class="sub">ROMA · MMXXVI</div>
+  <div class="center">
+    <div class="wordmark">MOSCATELLI</div>
+    <div class="sub">ROMA · MMXXVI</div>
+  </div>
+  <div class="coming">COMING SOON</div>
 </div>
 
-<div class="coming">COMING SOON</div>
+<script>
+/* ── Blob background renderer ──
+   Three slow-drifting chocolate blobs on a near-black field.
+   All arithmetic is kept cheap — no WebGL needed.
+*/
+(function () {
+  const canvas = document.getElementById("bg");
+  const ctx    = canvas.getContext("2d");
 
-</div>
+  /* Palette — all very close to background, barely lifted */
+  const COLORS = [
+    { r: 34,  g: 17,  b: 7  },   // top-left corner blob
+    { r: 38,  g: 20,  b: 8  },   // bottom-right corner blob
+    { r: 22,  g: 11,  b: 5  },   // centre anchor — nearly invisible
+  ];
+
+  /* Corner blobs — top-left and bottom-right, drifting slowly along diagonal axis */
+  const blobs = [
+    { x: 0.06, y: 0.08, r: 0.72, dx:  0.000018, dy:  0.000014, ci: 0 },
+    { x: 0.94, y: 0.92, r: 0.68, dx: -0.000015, dy: -0.000012, ci: 1 },
+    { x: 0.50, y: 0.50, r: 0.40, dx:  0.000010, dy:  0.000008, ci: 2 },
+  ];
+
+  let W, H;
+
+  function resize() {
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+
+  window.addEventListener("resize", resize);
+  resize();
+
+  function draw(ts) {
+    requestAnimationFrame(draw);
+
+    /* Background */
+    ctx.fillStyle = "#080705";
+    ctx.fillRect(0, 0, W, H);
+
+    /* Blobs */
+    blobs.forEach(b => {
+      /* Drift — bounce softly at edges */
+      b.x += b.dx;
+      b.y += b.dy;
+      if (b.x < 0.1 || b.x > 0.9) b.dx *= -1;
+      if (b.y < 0.1 || b.y > 0.9) b.dy *= -1;
+
+      const cx = b.x * W;
+      const cy = b.y * H;
+      /* radius scales with the smaller viewport dimension for aspect-ratio safety */
+      const radius = b.r * Math.min(W, H);
+
+      const c = COLORS[b.ci];
+      const grd = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius);
+      grd.addColorStop(0,   `rgba(${c.r},${c.g},${c.b}, 0.82)`);
+      grd.addColorStop(0.5, `rgba(${c.r},${c.g},${c.b}, 0.30)`);
+      grd.addColorStop(1,   `rgba(${c.r},${c.g},${c.b}, 0)`);
+
+      ctx.globalCompositeOperation = "lighter";
+      ctx.beginPath();
+      ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+      ctx.fillStyle = grd;
+      ctx.fill();
+      ctx.globalCompositeOperation = "source-over";
+    });
+
+
+  }
+
+  requestAnimationFrame(draw);
+})();
+</script>
+
 </body>
 </html>
