@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MOSCATELLI — Coming Soon</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+:root{
+--black:#0E0D0B;
+--black-2:#14120F;
+
+/* ultra subtle ivory gradient */
+--ivory-1:#F0E7D6;
+--ivory-2:#E7DCC7;
+--ivory-3:#D9CBB1;
+
+--ivory-mid:rgba(236,227,209,0.6);
+--ivory-light:rgba(236,227,209,0.42);
+
+--gold:rgba(176,146,104,0.18);
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+
+body{
+background:
+radial-gradient(1100px 520px at 50% 60%, var(--gold), transparent 60%),
+linear-gradient(180deg, var(--black-2), var(--black));
+font-family:"Cinzel", serif;
+overflow:hidden;
+}
+
+.wrap{
+display:flex;
+align-items:center;
+justify-content:center;
+height:100%;
+text-align:center;
+position:relative;
+}
+
+.center{
+transform:translateY(-4vh);
+}
+
+/* GRADIENT WORDMARK */
+.wordmark{
+font-size:clamp(34px,5vw,84px);
+letter-spacing:.42em;
+
+/* gradient applied */
+background:linear-gradient(
+90deg,
+var(--ivory-3) 0%,
+var(--ivory-2) 35%,
+var(--ivory-1) 50%,
+var(--ivory-2) 65%,
+var(--ivory-3) 100%
+);
+
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+
+opacity:0;
+animation:fadeSlow 3.2s ease forwards;
+}
+
+/* unchanged hierarchy */
+.sub{
+margin-top:18px;
+font-size:clamp(10px,1vw,14px);
+letter-spacing:.55em;
+color:var(--ivory-mid);
+opacity:0;
+animation:fadeSlow 2.6s ease forwards;
+animation-delay:1.8s;
+}
+
+.coming{
+position:absolute;
+bottom:10vh;
+left:0;
+right:0;
+margin:auto;
+text-align:center;
+font-size:clamp(12px,1.2vw,16px);
+letter-spacing:.5em;
+color:var(--ivory-light);
+opacity:0;
+animation:fadeSlow 2.4s ease forwards;
+animation-delay:3.2s;
+}
+
+@keyframes fadeSlow{
+0%{opacity:0; transform:translateY(12px)}
+100%{opacity:1; transform:translateY(0)}
+}
+
+@media(max-width:600px){
+.wordmark{letter-spacing:.28em}
+.sub{letter-spacing:.35em}
+.coming{letter-spacing:.35em}
+}
+</style>
+</head>
+
+<body>
+<div class="wrap">
+
+<div class="center">
+<div class="wordmark">MOSCATELLI</div>
+<div class="sub">ROMA · MMXXVI</div>
+</div>
+
+<div class="coming">COMING SOON</div>
+
+</div>
+</body>
+</html>
